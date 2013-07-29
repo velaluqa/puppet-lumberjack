@@ -7,7 +7,7 @@
 # [*config*]
 #   The config file to load
 #   Value type is string
-#   Default value: undef
+#   Default value: /etc/lumberjack2/<instance_name>/lumberjack2-conf.json
 #   This variable is required
 #
 # [*cpuprofile*]
@@ -37,11 +37,10 @@
 # === Authors
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
-# Editor:  Kayla Green <mailto:kaylagreen771@gmail.com>
 #
 
 define lumberjack2::instance(
-  $config,            
+  $config           = "/etc/lumberjack2/${name}/lumberjack2-conf.json",            
   $cpuprofile       = undef,
   $idle_flush_time  = '5',
   $log_to_syslog    = false,
@@ -157,4 +156,10 @@ define lumberjack2::instance(
     notify  => $notify_lumberjack2
   }
 
+  # Setup configuration files
+  file { "/etc/lumberjack2/${name}/lumberjack2-conf.json":
+    ensure  => $ensure,
+    source  => template("${module_name}/lumberjack2-conf.json.erb"),
+    require => File[ "/etc/lumberjack2/${name}" ],
+    notify  => $notify_lumberjack2
 }

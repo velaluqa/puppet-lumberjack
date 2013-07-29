@@ -27,6 +27,7 @@
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 #
+
 class lumberjack2::params {
 
   #### Default values for the parameters of the main module class, init.pp

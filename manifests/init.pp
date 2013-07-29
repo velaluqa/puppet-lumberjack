@@ -52,20 +52,20 @@
 #   String to set the specific version you want to install.
 #   Defaults to <tt>false</tt>.
 #
-# [*host*]
-#   Hostname to connect to
+# [*config*]
+#   The config file to load
 #
-# [*port*]
-#   Port to connect to
+# [*cpuprofile*]
+#   write cpu profile to file
 #
-# [*files*]
-#   Files to monitor
+# [*idle_flush_time*]
+#   Maximum time to wait for a full spool before flushing anyway
 #
-# [*ssl_ca*]
-#   ssl CA file
+# [*log_to_syslog*]
+#   Log to syslog instead of stdout
 #
-# [*fields*]
-#   extra fields to add
+# [*spool_size*]
+#   Maximum number of events to spool before a flush is forced.
 #
 # The default values for the parameters are set in lumberjack2::params. Have
 # a look at the corresponding <tt>params.pp</tt> manifest file if you need more
@@ -92,6 +92,7 @@
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 #
+
 class lumberjack2(
   $ensure            = $lumberjack2::params::ensure,
   $autoupgrade       = $lumberjack2::params::autoupgrade,
