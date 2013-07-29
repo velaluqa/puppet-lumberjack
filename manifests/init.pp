@@ -1,6 +1,6 @@
-# == Class: lumberjack
+# == Class: lumberjack2
 #
-# This class is able to install or remove lumberjack on a node.
+# This class is able to install or remove lumberjack2 on a node.
 # It manages the status of the related service.
 #
 # [Add description - What does this module do on a node?] FIXME/TODO
@@ -67,7 +67,7 @@
 # [*fields*]
 #   extra fields to add
 #
-# The default values for the parameters are set in lumberjack::params. Have
+# The default values for the parameters are set in lumberjack2::params. Have
 # a look at the corresponding <tt>params.pp</tt> manifest file if you need more
 # technical information about them.
 #
@@ -75,15 +75,15 @@
 # === Examples
 #
 # * Installation, make sure service is running and will be started at boot time:
-#     class { 'lumberjack': }
+#     class { 'lumberjack2': }
 #
 # * Removal/decommissioning:
-#     class { 'lumberjack':
+#     class { 'lumberjack2':
 #       ensure => 'absent',
 #     }
 #
 # * Install everything but disable service(s) afterwards
-#     class { 'lumberjack':
+#     class { 'lumberjack2':
 #       status => 'disabled',
 #     }
 #
@@ -92,13 +92,13 @@
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 #
-class lumberjack(
-  $ensure            = $lumberjack::params::ensure,
-  $autoupgrade       = $lumberjack::params::autoupgrade,
-  $status            = $lumberjack::params::status,
-  $restart_on_change = $lumberjack::params::restart_on_change,
+class lumberjack2(
+  $ensure            = $lumberjack2::params::ensure,
+  $autoupgrade       = $lumberjack2::params::autoupgrade,
+  $status            = $lumberjack2::params::status,
+  $restart_on_change = $lumberjack2::params::restart_on_change,
   $version           = false,
-) inherits lumberjack::params {
+) inherits lumberjack2::params {
 
   #### Validate parameters
 
@@ -116,10 +116,10 @@ class lumberjack(
   }
 
   #### Manage actions
-  anchor { 'lumberjack::begin': }
-  anchor { 'lumberjack::end': }
+  anchor { 'lumberjack2::begin': }
+  anchor { 'lumberjack2::end': }
 
   # package(s)
-  class { 'lumberjack::package': }
+  class { 'lumberjack2::package': }
 
 }

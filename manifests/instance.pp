@@ -1,60 +1,56 @@
-# Define: lumberjack::instance
+# Define: lumberjack2::instance
 #
-# This define allows you to setup an instance of lumberjack
+# This define allows you to setup an instance of lumberjack2
 #
 # === Parameters
 #
-# [*host*]
-#   Host name or IP address of the Logstash instance to connect to
+# [*config*]
+#   The config file to load
+#   Value type is string
+#   Default value: undef
+#   This variable is required
+#
+# [*cpuprofile*]
+#   Write cpu profile to file
 #   Value type is string
 #   Default value: undef
 #   This variable is optional
 #
-# [*port*]
-#   Port number of the Logstash instance to connect to
-#   Value type is number
-#   Default value: undef
+# [*idle-flush-time*]
+#   Maximum time to wait for a full spool before flushing anyway
+#   Value type is number 
+#   Default value: 5 seconds
 #   This variable is optional
 #
-# [*files*]
-#   Array of files you wish to process
-#   Value type is array
-#   Default value: undef
-#   This variable is optional
-#
-# [*ssl_ca_file*]
-#   File to use for the SSL CA
+# [*log-to-syslog*]
+#   Log to syslog instead of stdout
 #   Value type is string
-#   This variable is mandatory
-#
-# [*fields*]
-#   Extra fields to send
-#   Value type is hash
 #   Default value: false
 #   This variable is optional
 #
-# [*run_as_service*]
-#   Set this to true if you want to run this as a service.
-#   Set to false if you only want to manage the ssl_ca_file
-#   Value type is boolean
-#   Default value: true
+# [*spool-size*]
+#   Maximum number of events to spool before a flush is forced.
+#   Value type is number
+#   Default value: `1024
 #   This variable is optional
 #
 # === Authors
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
+# Editor:  Kayla Green <mailto:kaylagreen771@gmail.com>
 #
-define lumberjack::instance(
-  $ssl_ca_file,
-  $host           = undef,
-  $port           = undef,
-  $files          = undef,
-  $fields         = false,
-  $run_as_service = true,
-  $ensure         = $logstash::ensure
+
+define lumberjack2::instance(
+  $config,            
+  $cpuprofile       = undef,
+  $idle_flush_time  = '5',
+  $log_to_syslog    = false,
+  $spool_size       = '1024',
+  $run_as_server    = true,
+  $ensure           = $logstash::ensure,
 ) {
 
-  require lumberjack
+  require lumberjack2
 
   File {
     owner => 'root',
@@ -65,38 +61,36 @@ define lumberjack::instance(
   if ($run_as_service == true ) {
 
     # Input validation
-    validate_string($host)
+    validate_string($cpuprofile)
+    validate_bool($log_to_syslog)
 
-    if ! is_numeric($port) {
-      fail("\"${port}\" is not a valid port parameter value")
+    if ! is_numeric($idle_flush_time) {
+      fail("\"${idle_flush_time}\" is not a valid idle-flush-time parameter value")
     }
 
-    validate_array($files)
-    $logfiles = join($files,' ')
-
-    if $fields {
-      validate_hash($fields)
+     if ! is_numeric($spool_size) {
+      fail("\"${spool_size}\" is not a valid spool-size parameter value")
     }
 
     # Setup init file if running as a service
-    $notify_lumberjack = $lumberjack::restart_on_change ? {
-      true  => Service["lumberjack-${name}"],
+    $notify_lumberjack2 = $lumberjack2::restart_on_change ? {
+      true  => Service["lumberjack2-${name}"],
       false => undef,
     }
 
-    file { "/etc/init.d/lumberjack-${name}":
+    file { "/etc/init.d/lumberjack2-${name}":
       ensure  => $ensure,
       mode    => '0755',
-      content => template("${module_name}/etc/init.d/lumberjack.erb"),
-      notify  => $notify_lumberjack
+      content => template("${module_name}/etc/init.d/lumberjack2.erb"),
+      notify  => $notify_lumberjack2
     }
 
     #### Service management
 
     # set params: in operation
-    if $lumberjack::ensure == 'present' {
+    if $lumberjack2::ensure == 'present' {
 
-      case $lumberjack::status {
+      case $lumberjack2::status {
         # make sure service is currently running, start it on boot
         'enabled': {
           $service_ensure = 'running'
@@ -121,7 +115,7 @@ define lumberjack::instance(
         # note: don't forget to update the parameter check in init.pp if you
         #       add a new or change an existing status.
         default: {
-          fail("\"${lumberjack::status}\" is an unknown service status value")
+          fail("\"${lumberjack2::status}\" is an unknown service status value")
         }
       }
 
@@ -135,32 +129,32 @@ define lumberjack::instance(
     }
 
     # action
-    service { "lumberjack-${name}":
+    service { "lumberjack2-${name}":
       ensure     => $service_ensure,
       enable     => $service_enable,
-      name       => $lumberjack::params::service_name,
-      hasstatus  => $lumberjack::params::service_hasstatus,
-      hasrestart => $lumberjack::params::service_hasrestart,
-      pattern    => $lumberjack::params::service_pattern,
+      name       => $lumberjack2::params::service_name,
+      hasstatus  => $lumberjack2::params::service_hasstatus,
+      hasrestart => $lumberjack2::params::service_hasrestart,
+      pattern    => $lumberjack2::params::service_pattern,
     }
 
   } else {
 
-    $notify_lumberjack = undef
+    $notify_lumberjack2 = undef
 
   }
 
 
-  file { "/etc/lumberjack/${name}":
+  file { "/etc/lumberjack2/${name}":
     ensure => directory,
   }
 
   # Setup certificate files
-  file { "/etc/lumberjack/${name}/ca.crt":
+  file { "/etc/lumberjack2/${name}/ca.crt":
     ensure  => $ensure,
-    source  => $ssl_ca_file,
-    require => File[ "/etc/lumberjack/${name}" ],
-    notify  => $notify_lumberjack
+    source  => template("${module_name}/ca.crt.erb"),
+    require => File[ "/etc/lumberjack2/${name}" ],
+    notify  => $notify_lumberjack2
   }
 
 }
