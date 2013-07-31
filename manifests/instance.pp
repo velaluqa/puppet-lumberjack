@@ -5,7 +5,7 @@
 # === Parameters
 #
 # [*config*]
-#   The config file to load
+#   The config files' location to load
 #   Value type is string
 #   Default value: /etc/lumberjack2/<instance_name>/lumberjack2-conf.json
 #   This variable is required
@@ -40,7 +40,7 @@
 #
 
 define lumberjack2::instance(
-  $config           = "/etc/lumberjack2/${name}/lumberjack2-conf.json",            
+  $config           = '/etc/lumberjack2/${name}/*.conf',            
   $cpuprofile       = undef,
   $idle_flush_time  = '5',
   $log_to_syslog    = false,

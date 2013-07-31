@@ -53,7 +53,7 @@
 #   Defaults to <tt>false</tt>.
 #
 # [*config*]
-#   The config file to load
+#   The config files' location to load
 #
 # [*cpuprofile*]
 #   write cpu profile to file
