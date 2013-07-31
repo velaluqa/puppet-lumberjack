@@ -5,6 +5,7 @@ A puppet module for managing and configuring lumberjack2
 https://github.com/jordansissel/lumberjack/tree/lumberjack2-hack
 
 This module is based upon https://github.com/electrical/puppet-lumberjack 
+
 This update has not been puppet 3 tested.
 
 ## Usage
