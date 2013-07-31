@@ -34,19 +34,47 @@
 #   Default value: `1024
 #   This variable is optional
 #
+# [*servers*]
+#   List of Host names or IP addresses of Logstash instances to connect to
+#   Value type is array
+#   Default value: undef
+#   This variable is required
+#
+#
+# [*ssl_ca_file*]
+#   File to use for the SSL CA
+#   Value type is string
+#   This variable is mandatory
+#
+# [*ssl_key*]
+#   File to use for your SSL key
+#   Value type is string
+#   Default value: undef
+#   This variable is optional
+#
+# [*ssl_certificate*]
+#   File to use for your SSL certificate
+#   Value type is string
+#   Default value: undef
+#   This variable is optional
+
+#
 # === Authors
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 #
 
 define lumberjack2::instance(
-  $config           = '/etc/lumberjack2/${name}/*.conf',            
-  $cpuprofile       = undef,
+  $config           = "/etc/lumberjack2/${name}/lumberjack.conf",            
+  $servers          = undef,
+  $ssl_ca_file      = undef,
+  $ssl_key          = '',
+  $cpuprofile       = '',
   $idle_flush_time  = '5',
   $log_to_syslog    = false,
   $spool_size       = '1024',
   $run_as_server    = true,
-  $ensure           = $logstash::ensure,
+  $ensure           = $logstash::ensure,  
 ) {
 
   require lumberjack2
@@ -56,10 +84,14 @@ define lumberjack2::instance(
     group => 'root',
     mode  => '0644'
   }
+  validate_bool($run_as_server)
 
   if ($run_as_service == true ) {
 
     # Input validation
+    validate_string($config)
+    validate_array($servers)
+    validate_string($ssl_ca_file)
     validate_string($cpuprofile)
     validate_bool($log_to_syslog)
 
@@ -148,6 +180,15 @@ define lumberjack2::instance(
     ensure => directory,
   }
 
+  
+
+  include concat::setup
+  concat{"/etc/lumberjack2/${name}/resolv.conf":
+        owner => root,
+        group => root,
+        mode  => "0555",
+    }
+
   # Setup certificate files
   file { "/etc/lumberjack2/${name}/ca.crt":
     ensure  => $ensure,
@@ -156,10 +197,37 @@ define lumberjack2::instance(
     notify  => $notify_lumberjack2
   }
 
+  #Add network portion of config file
+  $network => { 
+    "network" => {
+        "servers" => $servers,
+        "ssl ca"  => $ssl_ca_file,
+        "ssl certificate" => $ssl_certificate,
+        "ssl key" => $ssl_key
+    }
+  }   
+
+  concat::fragment{"${name}-start":
+        target  => "/etc/lumberjack2/${name}/lumberjack.conf",
+        content => inline_template('{ <%= network.to_json %>'),
+        order   => 001,
+  }
+
+  #Add server portion of config file
+  concat::fragment{"${name}-end":
+        target  => "/etc/lumberjack2/${name}/lumberjack.conf",
+        content => '        {
+                            }
+                        ]
+                    }',
+        order   => 999,
+  }
+
+
   # Setup configuration files
-  file { "/etc/lumberjack2/${name}/lumberjack2-conf.json":
+  concat::setup { "/etc/lumberjack2/${name}/lumberjack.conf":
     ensure  => $ensure,
-    source  => template("${module_name}/lumberjack2-conf.json.erb"),
     require => File[ "/etc/lumberjack2/${name}" ],
     notify  => $notify_lumberjack2
+  }
 }

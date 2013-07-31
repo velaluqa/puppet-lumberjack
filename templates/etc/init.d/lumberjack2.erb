@@ -14,7 +14,8 @@ end
 
 DAEMON_PATH="/opt/lumberjack2/"
 DAEMON="bin/lumberjack2.sh"
-DAEMONOPTS="--ssl-ca-path /etc/lumberjack/<%= @instance %>/ca.crt --config $(cat <%= @config %>) --cpuprofile <%= @cpuprofile %> --idle-flush-time <%= idle_flush_time %> --log-to-syslog <%= @log_to_syslog %> --spool-size <%= @spool_size %>"
+OUTPUT=""
+DAEMONOPTS="--ssl-ca-path /etc/lumberjack/<%= @instance %>/ca.crt --config <%= @config %> --cpuprofile <%= @cpuprofile %> --idle-flush-time <%= idle_flush_time %> --log-to-syslog <%= @log_to_syslog %> --spool-size <%= @spool_size %>"
 
 NAME="lumberjack2-<%= @instance %>"
 DESC="Lumberjack2-<%= @instance %>"

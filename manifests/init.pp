@@ -67,6 +67,20 @@
 # [*spool_size*]
 #   Maximum number of events to spool before a flush is forced.
 #
+# [*servers*]
+#   List of Host names or IP addresses of Logstash instances to connect to
+#
+# [*ssl_ca_file*]
+#   File to use for the SSL CA
+#
+# [*ssl_key*]
+#   File to use for your host's SSL key
+#
+# [*ssl_certification*]
+#   File to use for your host's SSL cert
+#
+#
+#
 # The default values for the parameters are set in lumberjack2::params. Have
 # a look at the corresponding <tt>params.pp</tt> manifest file if you need more
 # technical information about them.
