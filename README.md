@@ -6,7 +6,7 @@ https://github.com/jordansissel/lumberjack/tree/lumberjack2-hack
 
 This module is based upon https://github.com/electrical/puppet-lumberjack 
 
-This update has not been puppet 3 tested.
+This updated module is in alpha stages and not yet formally tested.
 
 ## Usage
 
@@ -32,3 +32,14 @@ Install everything but disable service(s) afterwards:
        status => 'disabled',
      }
 
+To configure network information per instance:
+    lumberjack2::instance { 'instance_name':
+        servers     => ['array.of.hosts.net', 'localhost', '192.168.0.1'],
+        ssl_ca_file => '/location/of/ssl/ca/file',
+    }
+
+To configure file inputs:
+    lumberjack2::file { 'localhost-syslog':
+        paths    => ['/var/log/messages','/var/log/secure','/var/log/*.log/'],
+        fields   => { 'type' : 'syslog' }, 
+    }

@@ -209,7 +209,7 @@ define lumberjack2::instance(
 
   concat::fragment{"${name}-start":
         target  => "/etc/lumberjack2/${name}/lumberjack.conf",
-        content => inline_template('{ <%= network.to_json %>'),
+        content => inline_template('<%= "{" + network.to_json %>'),
         order   => 001,
   }
 

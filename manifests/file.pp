@@ -1,7 +1,7 @@
 define lumberjack2::file (
     $paths,
     $fields,
-    $instance  = ['agent'],
+    $instance  = 'agent',
 ){
 
     require lumberjack2::params
