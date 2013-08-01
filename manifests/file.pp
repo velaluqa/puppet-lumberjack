@@ -3,15 +3,11 @@ define lumberjack2::file (
     $fields,
     $instance  = 'agent',
 ){
-
-    require lumberjack2::params
     
     File {
         owner => 'root',
         group => 'root',
     }
-
-
 
     if ($paths != '') {
         validate_array($paths)
@@ -20,7 +16,7 @@ define lumberjack2::file (
         validate_hash($fields)
     }
  
-    $file => {
+    $file = {
       "paths" => $paths,
       "fields"=> $fields,
     }   

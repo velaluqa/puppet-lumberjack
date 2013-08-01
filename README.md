@@ -13,11 +13,12 @@ This updated module is in alpha stages and not yet formally tested.
 Installation, make sure service is running and will be started at boot time:
 
      class { 'lumberjack2': 
-       config           => '/path/to/config/file',
        cpuprofile       => '/path/to/write/cpu/profile/to/file',
        idle_flush_time  => '5',
        log_to_syslog    => false,
        spool_size       => '1024',
+       servers          => ['listof.hosts:12345', '127.0.0.1:9987'],
+       ssl_ca           => '/path/to/ssl/root/certificate',
      }
 
 Removal/decommissioning:
@@ -31,12 +32,6 @@ Install everything but disable service(s) afterwards:
      class { 'lumberjack2':
        status => 'disabled',
      }
-
-To configure network information per instance:
-    lumberjack2::instance { 'instance_name':
-        servers     => ['array.of.hosts.net', 'localhost', '192.168.0.1'],
-        ssl_ca_file => '/location/of/ssl/ca/file',
-    }
 
 To configure file inputs:
     lumberjack2::file { 'localhost-syslog':

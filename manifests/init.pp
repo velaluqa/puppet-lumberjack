@@ -108,11 +108,21 @@
 #
 
 class lumberjack2(
+  $servers,
+  $ssl_ca_path,
+  $ssl_key,
+  $cpuprofile,
+  $idle_flush_time,
+  $spool_size,
+  $log_to_syslog,
+  $config,
   $ensure            = $lumberjack2::params::ensure,
   $autoupgrade       = $lumberjack2::params::autoupgrade,
   $status            = $lumberjack2::params::status,
   $restart_on_change = $lumberjack2::params::restart_on_change,
   $version           = false,
+  $instance         = ['agent'],
+  $multi_instance    = true,
 ) inherits lumberjack2::params {
 
   #### Validate parameters
@@ -130,11 +140,22 @@ class lumberjack2(
     fail("\"${status}\" is not a valid status parameter value")
   }
 
-  #### Manage actions
-  anchor { 'lumberjack2::begin': }
-  anchor { 'lumberjack2::end': }
+  #### Manage Actions
+  class {'lumberjack2::package':}
+  class {'lumberjack2::instance':}
 
-  # package(s)
-  class { 'lumberjack2::package': }
 
+  if ($ensure == 'present') {
+    Anchor ['lumberjack2::begin']
+    -> Class['lumberjack2::package']
+    Class['lumberjack2::package'] -> Class ['lumberjack2::instance']
+    Class['lumberjack2::file'] ->
+    Anchor['lumberjack2::end']
+  } else {
+    Anchor['lumberjack2::begin']
+    -> Class['lumberjack2::file']
+    -> Class['lumberjack2::instance']
+    -> Class['lumberjack2::package']
+    -> Anchor['lumberjack2::end']
+  }
 }
