@@ -55,14 +55,14 @@ class lumberjack2::config {
 
 
         #Create network portion of config file
-        $network = sorted_json({
+        $network = {
             "network" => {
                 "servers" => $lumberjack2::servers,
                 "ssl ca"  => $lumberjack2::ssl_ca_path,
                 "ssl certificate" => $lumberjack2::ssl_certificate,
                 "ssl key" => $lumberjack2::ssl_key,
             }
-        })
+        }
         
         #### Setup configuration files
         include concat::setup
