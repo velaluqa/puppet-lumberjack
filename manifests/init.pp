@@ -105,24 +105,22 @@
 # === Authors
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
-#
+# Editor: Kayla Green <mailto:kaylagreen@gmail.com>
 
 class lumberjack2(
-  $servers,
-  $ssl_ca_path,
-  $ssl_key,
-  $cpuprofile,
-  $idle_flush_time,
-  $spool_size,
-  $log_to_syslog,
-  $config,
   $ensure            = $lumberjack2::params::ensure,
   $autoupgrade       = $lumberjack2::params::autoupgrade,
   $status            = $lumberjack2::params::status,
   $restart_on_change = $lumberjack2::params::restart_on_change,
   $version           = false,
-  $instance         = ['agent'],
-  $multi_instance    = true,
+  $run_as_service     = true,
+  $servers,
+  $ssl_ca_path,
+  $ssl_key          = '',
+  $cpuprofile       = '',
+  $idle_flush_time  = 5,
+  $spool_size       = 1024,
+  $log_to_syslog    = false,
 ) inherits lumberjack2::params {
 
   #### Validate parameters
@@ -130,6 +128,31 @@ class lumberjack2(
   # ensure
   if ! ($ensure in [ 'present', 'absent' ]) {
     fail("\"${ensure}\" is not a valid ensure parameter value")
+  }
+
+  validate_array($servers)
+  validate_string($ssl_ca_path)
+
+  if ($ssl_key != ''){
+        validate_string($ssl_key)
+  }
+  if ($ssl_cert != ''){
+        validate_string($ssl_cert)
+  }
+  if ($cpuprofile != '') {
+        validate_string($cpuprofile)
+  }
+
+  if ($log_to_syslog != '') {
+        validate_bool($log_to_syslog)
+  }
+
+  if ! is_numeric($idle_flush_time) {
+      fail("\"${idle_flush_time}\" is not a valid idle-flush-time parameter value")
+  }
+
+  if ! is_numeric($spool_size) {
+      fail("\"${spool_size}\" is not a valid spool-size parameter value")
   }
 
   # autoupgrade
@@ -141,21 +164,42 @@ class lumberjack2(
   }
 
   #### Manage Actions
-  class {'lumberjack2::package':}
-  class {'lumberjack2::instance':}
-
-
   if ($ensure == 'present') {
-    Anchor ['lumberjack2::begin']
-    -> Class['lumberjack2::package']
-    Class['lumberjack2::package'] -> Class ['lumberjack2::instance']
-    Class['lumberjack2::file'] ->
-    Anchor['lumberjack2::end']
-  } else {
-    Anchor['lumberjack2::begin']
-    -> Class['lumberjack2::file']
-    -> Class['lumberjack2::instance']
-    -> Class['lumberjack2::package']
-    -> Anchor['lumberjack2::end']
+        anchor {'lumberjack2::begin':
+            before  => Class['lumberjack2::package'],
+            notify  => Class['lumberjack2::service'],
+        }
+        class {'lumberjack2::package':
+            notify  => Class['lumberjack2::service'],
+        }
+        class {'lumberjack2::config':
+            require => Class['lumberjack2::package'],
+            notify  => Class['lumberjack2::service'],
+        }
+        class {'lumberjack2::service':
+            require => Class['lumberjack2::config'],
+        }
+        anchor { 'lumberjack2::end': 
+            require => Class['lumberjack2::service']
+        }
+  }
+  else {
+        anchor { 'lumberjack2::begin': 
+            before  => Class['lumberjack2::service'],
+            notify  => Class['lumberjack2::package'],
+        }
+        class {'lumberjack2::service':
+            notify  => Class['lumberjack2::package'],
+        }
+        class {'lumberjack2::config':
+            require => Class['lumberjack2::service'],
+            notify  => Class['lumberjack2::package'],
+        }
+        class {'lumberjack2::package':
+            require => Class['lumberjack2::config'],
+        }
+        anchor {'lumberjack2::end': 
+            require => Class['lumberjack2::package'],
+        }
   }
 }

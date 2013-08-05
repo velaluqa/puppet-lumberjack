@@ -41,8 +41,8 @@
 #   This variable is required
 #
 #
-# [*ssl_ca_file*]
-#   File to use for the SSL CA
+# [*ssl_ca_path*]
+#   Path to file to use for the SSL CA
 #   Value type is string
 #   This variable is mandatory
 #
@@ -64,57 +64,32 @@
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 #
 
-define lumberjack2::instance(
-  $servers,
-  $ssl_ca_file,
-  $config           = "/etc/lumberjack2/${name}/lumberjack.conf",            
-  $ssl_key          = undef,
-  $cpuprofile       = undef,
-  $idle_flush_time  = undef,
-  $log_to_syslog    = undef,
-  $spool_size       = undef,
-  $run_as_server    = true,
-  $ensure           = $lumberjack2::ensure,  
-) {
+class lumberjack2::service {
 
-  require lumberjack2
+  $config = "${lumberjack2::configdir}/conf/lumberjack.conf" 
+  $cpuprofile = $lumberjack2::cpuprofile
+  $idle_flush_time = $lumberjack2::idle_flush_time
+  $log_to_syslog    = $lumberjack2::log_to_syslog
+  $spool_size       = $lumberjack2::spool_size
+  $run_as_server    = $lumberjack2::run_as_server           
+  $ensure = $lumberjack2::ensure  
+   
+  validate_bool($run_as_service)
 
   File {
     owner => 'root',
     group => 'root',
     mode  => '0644'
   }
-  validate_bool($run_as_server)
 
   if ($run_as_service == true ) {
-
-    # Input validation
-    validate_string($config)
-    validate_array($servers)
-    validate_string($ssl_ca_file)
-    
-    if ($cpuprofile != '') {
-        validate_string($cpuprofile)
-    }
-    if ($log_to_syslog != '') {
-        validate_bool($log_to_syslog)
-    }
-
-    if ! is_numeric($idle_flush_time) {
-      fail("\"${idle_flush_time}\" is not a valid idle-flush-time parameter value")
-    }
-
-     if ! is_numeric($spool_size) {
-      fail("\"${spool_size}\" is not a valid spool-size parameter value")
-    }
-
     # Setup init file if running as a service
     $notify_lumberjack2 = $lumberjack2::restart_on_change ? {
-      true  => Service["lumberjack2-${name}"],
-      false => undef,
+       true  => Service["lumberjack2"],
+       false => undef,
     }
 
-    file { "/etc/init.d/lumberjack2-${name}":
+    file { "/etc/init.d/lumberjack2":
       ensure  => $ensure,
       mode    => '0755',
       content => template("${module_name}/etc/init.d/lumberjack2.erb"),
@@ -163,75 +138,16 @@ define lumberjack2::instance(
       $service_ensure = 'stopped'
       $service_enable = false
     }
-
-    # action
-    service { "lumberjack2-${name}":
-      ensure     => $service_ensure,
-      enable     => $service_enable,
-      name       => $lumberjack2::params::service_name,
-      hasstatus  => $lumberjack2::params::service_hasstatus,
-      hasrestart => $lumberjack2::params::service_hasrestart,
-      pattern    => $lumberjack2::params::service_pattern,
+    service { "lumberjack2":
+            ensure     => $service_ensure,
+            enable     => $service_enable,
+            name       => $lumberjack2::params::service_name,
+            hasstatus  => $lumberjack2::params::service_hasstatus,
+            hasrestart => $lumberjack2::params::service_hasrestart,
+            pattern    => $lumberjack2::params::service_pattern,
     }
-
-  } else {
-
+  } 
+  else {
     $notify_lumberjack2 = undef
-
-  }
-
-
-  file { "/etc/lumberjack2/${name}":
-    ensure => directory,
-  }
-
-  include concat::setup
-  concat{"/etc/lumberjack2/${name}/resolv.conf":
-        owner => root,
-        group => root,
-        mode  => "0555",
-    }
-
-  # Setup certificate files
-  file { "/etc/lumberjack2/${name}/ca.crt":
-    ensure  => $ensure,
-    source  => template("${module_name}/ca.crt.erb"),
-    require => File[ "/etc/lumberjack2/${name}" ],
-    notify  => $notify_lumberjack2,
-  }
-
-  #Add network portion of config file
-  $network = { 
-    "network" => {
-        "servers" => $servers,
-        "ssl ca"  => $ssl_ca_file,
-        "ssl certificate" => $ssl_certificate,
-        "ssl key" => $ssl_key,
-    }
-  }   
-
-  #### Setup configuration files
-  concat::setup { "/etc/lumberjack2/${name}/lumberjack.conf":
-    ensure  => $ensure,
-    require => File[ "/etc/lumberjack2/${name}" ],
-    notify  => $notify_lumberjack2,
-  }
-
-  # Add network portion of the config file
-   concat::fragment{"${name}-start":
-        target  => "/etc/lumberjack2/${name}/lumberjack.conf",
-        content => inline_template('<%= "{" + network.to_json %>'),
-        order   => 001,
-        notify  => $notify_lumberjack2
-  }
-
-  # Add the ending brackets and additional set of {} brackets needed to fix comma/json parsing issue
-  concat::fragment{"${name}-end":
-        target  => "/etc/lumberjack2/${name}/lumberjack.conf",
-        content => '        {
-                            }
-                        ]
-                    }',
-        order   => 999,
   }
 }

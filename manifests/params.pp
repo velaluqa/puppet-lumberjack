@@ -41,6 +41,9 @@ class lumberjack2::params {
   # service status
   $status = 'enabled'
 
+  # Config Directory
+  $configdir = '/var/local/lumberjack2'
+
   # Restart service on change
   $restart_on_change = false
 

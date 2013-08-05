@@ -1,7 +1,6 @@
 define lumberjack2::file (
     $paths,
     $fields,
-    $instance  = 'agent',
 ){
     
     File {
@@ -16,14 +15,16 @@ define lumberjack2::file (
         validate_hash($fields)
     }
  
-    $file = {
-      "paths" => $paths,
-      "fields"=> $fields,
+    $files = { 
+        "file" => {
+            "paths" => $paths,
+            "fields"=> $fields,
+         }
     }   
-    
+   
     concat::fragment{"${name}":
-        target  => "/etc/lumberjack2/$instance/lumberjack.conf",
-        content => inline_template('<%= file.to_json %>'),
+        target  => "${lumberjack2::params::configdir}/conf/lumberjack2.conf",
+        content => inline_template('<%= files.to_json %>'),
         order   => 010,
     }
 }

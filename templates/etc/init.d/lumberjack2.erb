@@ -1,24 +1,17 @@
-<%-
-fields = @fields
-if fields
-  extra_fields = fields.collect { |k,v| "--field #{k}=#{v}" }.join(" ")
-else
-  extra_fields = ''
-end
--%>
 #!/bin/bash
 # Lumberjack2 daemon
 # chkconfig: 345 20 80
-# description: lumberjack daemon
-# processname: lumberjack
+# description: lumberjack2 daemon
+# processname: lumberjack2
 
-DAEMON_PATH="/opt/lumberjack2/"
+DAEMON_PATH="/var/local/lumberjack2/"
 DAEMON="bin/lumberjack2.sh"
 OUTPUT=""
-DAEMONOPTS="--ssl-ca-path /etc/lumberjack/<%= @instance %>/ca.crt --config <%= @config %> --cpuprofile <%= @cpuprofile %> --idle-flush-time <%= idle_flush_time %> --log-to-syslog <%= @log_to_syslog %> --spool-size <%= @spool_size %>"
 
-NAME="lumberjack2-<%= @instance %>"
-DESC="Lumberjack2-<%= @instance %>"
+DAEMONOPTS="--config <%= @config %> --cpuprofile <%= @cpuprofile  %> --idle-flush-time <%= @idle_flush_time %> --log-to-syslog <%= @log_to_syslog %> --spool-size <%= @spool_size %>"
+
+NAME="lumberjack2"
+DESC="Lumberjack2"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
