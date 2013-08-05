@@ -27,7 +27,7 @@ class lumberjack2::package {
   #### Package management
 
   # set params: in operation
-  if $lumberjack2::ensure == 'present' {
+  if ($lumberjack2::ensure == 'present') {
 
     # Check if we want to install a specific version or not
     if $lumberjack2::version == false {
@@ -46,11 +46,11 @@ class lumberjack2::package {
 
   # set params: removal
   } else {
-    $package_ensure = 'purged'
+    $package_ensure = 'absent'
   }
 
   # action
-  package { $lumberjack2::params::package:
+  package { $lumberjack2::params::package :
     ensure => $package_ensure,
   }
 

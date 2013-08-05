@@ -21,10 +21,11 @@ define lumberjack2::file (
             "fields"=> $fields,
          }
     }   
-   
-    concat::fragment{"${name}":
-        target  => "${lumberjack2::params::configdir}/conf/lumberjack2.conf",
-        content => inline_template('<%= files.to_json %>'),
-        order   => 010,
+    if ($lumberjack2::ensure == 'present' ) { 
+        concat::fragment{"${name}":
+            target  => "${lumberjack2::params::configdir}/conf/lumberjack2.conf",
+            content => inline_template('<%= files.to_json %>'),
+            order   => 010,
+        }
     }
 }

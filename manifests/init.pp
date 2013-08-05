@@ -166,14 +166,14 @@ class lumberjack2(
   #### Manage Actions
   if ($ensure == 'present') {
         anchor {'lumberjack2::begin':
-            before  => Class['lumberjack2::package'],
-            notify  => Class['lumberjack2::service'],
-        }
-        class {'lumberjack2::package':
+            before  => Class['lumberjack2::config'],
             notify  => Class['lumberjack2::service'],
         }
         class {'lumberjack2::config':
-            require => Class['lumberjack2::package'],
+            notify  => Class['lumberjack2::service'],
+        }
+        class {'lumberjack2::package':
+            require => Class['lumberjack2::config'],
             notify  => Class['lumberjack2::service'],
         }
         class {'lumberjack2::service':
@@ -186,20 +186,20 @@ class lumberjack2(
   else {
         anchor { 'lumberjack2::begin': 
             before  => Class['lumberjack2::service'],
-            notify  => Class['lumberjack2::package'],
+            notify  => Class['lumberjack2::config'],
         }
         class {'lumberjack2::service':
             notify  => Class['lumberjack2::package'],
         }
-        class {'lumberjack2::config':
-            require => Class['lumberjack2::service'],
-            notify  => Class['lumberjack2::package'],
-        }
         class {'lumberjack2::package':
-            require => Class['lumberjack2::config'],
+            require => Class['lumberjack2::service'],
+            notify  => Class['lumberjack2::config'],
+        }
+        class {'lumberjack2::config':
+            require => Class['lumberjack2::package'],
         }
         anchor {'lumberjack2::end': 
-            require => Class['lumberjack2::package'],
+            require => Class['lumberjack2::config'],
         }
   }
 }

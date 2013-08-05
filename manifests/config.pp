@@ -31,7 +31,7 @@ class lumberjack2::config {
   
     $configdir = $lumberjack2::params::configdir
 
-    if ($lumberjack2::params::ensure == 'present') {
+    if ($lumberjack2::ensure == 'present') {
         # Manage the single instance dir
         file { "${configdir}":
             ensure  => directory,
@@ -55,17 +55,17 @@ class lumberjack2::config {
 
 
         #Create network portion of config file
-        $network = {
+        $network = sorted_json({
             "network" => {
                 "servers" => $lumberjack2::servers,
                 "ssl ca"  => $lumberjack2::ssl_ca_path,
                 "ssl certificate" => $lumberjack2::ssl_certificate,
                 "ssl key" => $lumberjack2::ssl_key,
             }
-        }
-
-        include concat::setup
+        })
+        
         #### Setup configuration files
+        include concat::setup
         concat{ "${configdir}/conf/lumberjack2.conf":
             require => File["${configdir}/conf"],
         }
@@ -84,14 +84,15 @@ class lumberjack2::config {
             content => inline_template('"}" + "\n"'),
             order   => 999,
         }
+        
     } else {
         # Remove the lumberjack2 directory and all of its configs. 
-        file {"Purged_Dir": 
-            path    => "${configdir}",
-            ensure  => absent,
-            recurse => true,
+        file {$configdir : 
+            ensure  => 'absent',
             purge   => true,
+            recurse => true,
             force   => true,
         }
+        
     }
 }
