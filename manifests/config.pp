@@ -55,14 +55,7 @@ class lumberjack2::config {
 
 
         #Create network portion of config file
-        $network = {
-            "network" => {
-                "servers" => $lumberjack2::servers,
-                "ssl ca"  => $lumberjack2::ssl_ca_path,
-                "ssl certificate" => $lumberjack2::ssl_certificate,
-                "ssl key" => $lumberjack2::ssl_key,
-            }
-        }
+        $network = sorted_json({"network" => {"servers" => $lumberjack2::servers, "ssl ca"=> "${lumberjack2::ssl_ca_path}", "ssl certificate" => "${lumberjack2::ssl_certificate}", "ssl key" => "${lumberjack2::ssl_key}",}})
         
         #### Setup configuration files
         include concat::setup
@@ -73,7 +66,7 @@ class lumberjack2::config {
         # Add network portion of the config file
         concat::fragment{"default-start":
             target  => "${configdir}/conf/lumberjack2.conf",
-            content => inline_template('<%= require "json"; "{" + network.to_json %>'),
+            content => "{\n ${network}",
             order   => 001,
         }  
 
@@ -81,7 +74,7 @@ class lumberjack2::config {
         # Add the ending brackets and additional set of {} brackets needed to fix comma/json parsing issue
         concat::fragment{"default-end":
             target  => "${configdir}/conf/lumberjack2.conf",
-            content => inline_template('"}" + "\n"'),
+            content => "}\n",
             order   => 999,
         }
         

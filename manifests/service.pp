@@ -66,7 +66,7 @@
 
 class lumberjack2::service {
 
-  $config = "${lumberjack2::configdir}/conf/lumberjack.conf" 
+  $config = "${lumberjack2::configdir}/conf/lumberjack2.conf" 
   $cpuprofile = $lumberjack2::cpuprofile
   $idle_flush_time = $lumberjack2::idle_flush_time
   $log_to_syslog    = $lumberjack2::log_to_syslog
@@ -89,7 +89,7 @@ class lumberjack2::service {
        false => undef,
     }
 
-    file { "/etc/init.d/lumberjack2":
+    file { '/etc/init.d/lumberjack2' :
       ensure  => $ensure,
       mode    => '0755',
       content => template("${module_name}/etc/init.d/lumberjack2.erb"),
@@ -145,6 +145,7 @@ class lumberjack2::service {
             hasstatus  => $lumberjack2::params::service_hasstatus,
             hasrestart => $lumberjack2::params::service_hasrestart,
             pattern    => $lumberjack2::params::service_pattern,
+            require    => File['/etc/init.d/lumberjack2'],
     }
   } 
   else {

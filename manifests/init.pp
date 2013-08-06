@@ -117,7 +117,7 @@ class lumberjack2(
   $servers,
   $ssl_ca_path,
   $ssl_key          = '',
-  $cpuprofile       = '',
+  $cpuprofile       = undef,
   $idle_flush_time  = 5,
   $spool_size       = 1024,
   $log_to_syslog    = false,
@@ -139,7 +139,7 @@ class lumberjack2(
   if ($ssl_cert != ''){
         validate_string($ssl_cert)
   }
-  if ($cpuprofile != '') {
+  if ($cpuprofile != undef) {
         validate_string($cpuprofile)
   }
 

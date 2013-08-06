@@ -8,15 +8,10 @@
                             <% end -%>
                          ],
                 "fields": { 
-                                <% @fields.keys.sort.each do |key| -%>
-                                    "<%= key %>:"
-                                        <% @fields[key].each do |val| -%>
-                                            <% if @fields[key] != @fields.last -%>
-                                                "<%= val %>",
-                                            <% else %->
-                                                "<%= val %>"
-                                            <% end -%>
-                                        <% end -%>
-                                <% end -%>
+                                <% @fields.each do |key, val| -%>
+                                     "<%= key %>": "<%= val >", 
+                                <% end -%> 
+                                    "key": "value" 
                           }
             },
+            {

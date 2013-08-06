@@ -15,16 +15,11 @@ define lumberjack2::file (
         validate_hash($fields)
     }
  
-    $files = { 
-        "file" => {
-            "paths" => $paths,
-            "fields"=> $fields,
-         }
-    }   
+    $files = sorted_json({"file" => { "paths" => $paths, "fields"=> $fields,}})   
     if ($lumberjack2::ensure == 'present' ) { 
         concat::fragment{"${name}":
             target  => "${lumberjack2::params::configdir}/conf/lumberjack2.conf",
-            content => inline_template('<%= files.to_json %>'),
+            content => inline_template('<%= files %>'),
             order   => 010,
         }
     }
