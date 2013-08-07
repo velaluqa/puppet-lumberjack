@@ -57,7 +57,7 @@ class lumberjack2::params {
     }
     'Debian', 'Ubuntu': {
       # main application
-      $package = [ 'lumberjack2' ]
+      $package = [ 'lumberjack' ]
     }
     default: {
       fail("\"${module_name}\" provides no package default value
@@ -68,13 +68,13 @@ class lumberjack2::params {
   # service parameters
   case $::operatingsystem {
     'CentOS', 'Fedora', 'Scientific', 'OracleLinux', 'Amazon', 'RedHat': {
-      $service_name       = 'lumberjack2'
+      $service_name       = 'lumberjack'
       $service_hasrestart = true
       $service_hasstatus  = true
       $service_pattern    = $service_name
     }
     'Debian', 'Ubuntu': {
-      $service_name       = 'lumberjack2'
+      $service_name       = 'lumberjack'
       $service_hasrestart = true
       $service_hasstatus  = true
       $service_pattern    = $service_name
