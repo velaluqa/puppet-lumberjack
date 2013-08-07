@@ -42,7 +42,7 @@ class lumberjack2::params {
   $status = 'enabled'
 
   # Config Directory
-  $configdir = '/var/local/lumberjack2'
+  $configdir = '/opt/lumberjack'
 
   # Restart service on change
   $restart_on_change = false
@@ -53,7 +53,7 @@ class lumberjack2::params {
   case $::operatingsystem {
     'CentOS', 'Fedora', 'Scientific', 'OracleLinux', 'Amazon', 'RedHat': {
       # main application
-      $package = [ 'lumberjack2' ]
+      $package = [ 'lumberjack' ]
     }
     'Debian', 'Ubuntu': {
       # main application
