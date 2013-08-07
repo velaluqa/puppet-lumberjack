@@ -1,17 +1,5 @@
-                "paths": [ 
-                            <% @paths.each do |path| -%>
-                                <% if path != @paths.last -%>
-                                    "<%= path %>",
-                                <% else -%>
-                                    "<%= path %>"
-                                <% end -%>
-                            <% end -%>
-                         ],
-                "fields": { 
-                                <% @fields.each do |key, val| -%>
-                                     "<%= key %>": "<%= val >", 
-                                <% end -%> 
-                                    "key": "value" 
-                          }
-            },
-            {
+                    "paths": [ <% @paths.each do |path| -%><% if path != @paths.last -%>"<%= path %>", <% else -%>"<%= path %>"<% end -%><% end -%> ],
+                <% i = 0 -%>
+                    "fields": { <% @fields.each_pair do |key, val| -%><% i = i + 1 -%>"<%= key %>": <% if i != @fields.keys.size -%><% if val.kind_of?(Array) -%>"<%= val.join(", ") %>", <% else -%>"<%= val %>", <% end -%><% else -%><% if val.kind_of?(Array) -%>"<%= val.join(", ") %>"<% else -%>"<%= val -%>"<% end -%> <% end -%><% end -%> }
+                },
+                {

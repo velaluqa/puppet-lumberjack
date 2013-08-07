@@ -1,18 +1,10 @@
 {
     "network": {
-                "servers": [ 
-                            <% @hosts.each do |host| -%>
-                                <% if host != @hosts.last -%>
-                                    "<%= host %>",
-                                <% else -%>
-                                    "<%= host %>"
-                                <% end -%>
-                            <% end -%>
-                         ],
-                "ssl ca": { "<%= @ssl_ca %>" }
-                <% if @ssl_certificate -%> ,"ssl certificate": "<%= @ssl_certificate %>" <% end -%>
-                <% if @ssl_key -%> ,"ssl key": "<%= @ssl_key %>" <% end -%>
-    }
+                "servers": [ <% if @servers.kind_of?(Array) %>"<%= servers.join("\", \"") %>"<% else -%>"<%= @servers %>"<% end -%> ],
+                "ssl ca": "<%= @ssl_ca %>" 
+                <% if @ssl_certificate -%>, "ssl certificate": "<%= @ssl_certificate %>" <% end -%>
+                <% if @ssl_key -%> ,"ssl key": "<%= @ssl_key %>"<% end -%>
+        },
     
     "files": [
-             {
+                {

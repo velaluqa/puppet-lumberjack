@@ -76,7 +76,7 @@
 # [*ssl_key*]
 #   File to use for your host's SSL key
 #
-# [*ssl_certification*]
+# [*ssl_certificate*]
 #   File to use for your host's SSL cert
 #
 #
@@ -116,9 +116,10 @@ class lumberjack2(
   $run_as_service     = true,
   $servers,
   $ssl_ca_path,
-  $ssl_key          = '',
+  $ssl_certificate         = undef,
+  $ssl_key          = undef,
   $cpuprofile       = undef,
-  $idle_flush_time  = 5,
+  $idle_flush_time  = '5s',
   $spool_size       = 1024,
   $log_to_syslog    = false,
 ) inherits lumberjack2::params {
@@ -133,11 +134,11 @@ class lumberjack2(
   validate_array($servers)
   validate_string($ssl_ca_path)
 
-  if ($ssl_key != ''){
+  if ($ssl_key != undef){
         validate_string($ssl_key)
   }
-  if ($ssl_cert != ''){
-        validate_string($ssl_cert)
+  if ($ssl_certificate != undef){
+        validate_string($ssl_certificate)
   }
   if ($cpuprofile != undef) {
         validate_string($cpuprofile)
@@ -147,8 +148,8 @@ class lumberjack2(
         validate_bool($log_to_syslog)
   }
 
-  if ! is_numeric($idle_flush_time) {
-      fail("\"${idle_flush_time}\" is not a valid idle-flush-time parameter value")
+  if ($idle_flush_time != '') {
+        validate_string($idle_flush_time)
   }
 
   if ! is_numeric($spool_size) {
