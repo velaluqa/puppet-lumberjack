@@ -4,8 +4,8 @@
 # description: lumberjack2 daemon
 # processname: lumberjack2
 
-DAEMON_PATH="/opt/lumberjack/"
-DAEMON="bin/lumberjack.sh"
+DAEMON_PATH="/var/local/lumberjack2/"
+DAEMON="bin/lumberjack2.sh"
 OUTPUT=""
 
 DAEMONOPTS="--config <%= @config %> <% if @cpuprofile %> --cpuprofile <%= @cpuprofile  %>  <% end %> --idle-flush-time <%= @idle_flush_time %> --log-to-syslog <%= @log_to_syslog %> --spool-size <%= @spool_size %>"

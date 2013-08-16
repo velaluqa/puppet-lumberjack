@@ -42,7 +42,7 @@ class lumberjack2::params {
   $status = 'enabled'
 
   # Config Directory
-  $configdir = '/opt/lumberjack'
+  $configdir = '/var/local/lumberjack2'
 
   # Restart service on change
   $restart_on_change = false
@@ -53,11 +53,11 @@ class lumberjack2::params {
   case $::operatingsystem {
     'CentOS', 'Fedora', 'Scientific', 'OracleLinux', 'Amazon', 'RedHat': {
       # main application
-      $package = [ 'lumberjack' ]
+      $package = [ 'lumberjack2' ]
     }
     'Debian', 'Ubuntu': {
       # main application
-      $package = [ 'lumberjack' ]
+      $package = [ 'lumberjack2' ]
     }
     default: {
       fail("\"${module_name}\" provides no package default value
@@ -68,13 +68,13 @@ class lumberjack2::params {
   # service parameters
   case $::operatingsystem {
     'CentOS', 'Fedora', 'Scientific', 'OracleLinux', 'Amazon', 'RedHat': {
-      $service_name       = 'lumberjack'
+      $service_name       = 'lumberjack2'
       $service_hasrestart = true
       $service_hasstatus  = true
       $service_pattern    = $service_name
     }
     'Debian', 'Ubuntu': {
-      $service_name       = 'lumberjack'
+      $service_name       = 'lumberjack2'
       $service_hasrestart = true
       $service_hasstatus  = true
       $service_pattern    = $service_name
