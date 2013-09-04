@@ -71,7 +71,7 @@ class lumberjack2::service {
   $idle_flush_time = $lumberjack2::idle_flush_time
   $log_to_syslog    = $lumberjack2::log_to_syslog
   $spool_size       = $lumberjack2::spool_size
-  $run_as_server    = $lumberjack2::run_as_server           
+  $run_as_service   = $lumberjack2::run_as_service          
   $ensure = $lumberjack2::ensure  
    
   validate_bool($run_as_service)
