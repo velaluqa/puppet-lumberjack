@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe 'lumberjack2::instance', :type => 'define' do
+describe 'lumberjack::instance', :type => 'define' do
 
   let(:title) { 'foo' }
   let(:facts) { { :operatingsystem => 'CentOS' } }
-  let(:pre_condition) { 'class {"lumberjack2":; }' }
+  let(:pre_condition) { 'class {"lumberjack":; }' }
 
   context "Setup a instance with the service" do
 
@@ -16,9 +16,9 @@ describe 'lumberjack2::instance', :type => 'define' do
       :run_as_service => true
     } end
 
-    it { should contain_file('/etc/init.d/lumberjack2-foo') }
-    it { should contain_file('/etc/lumberjack2/foo') }
-    it { should contain_file('/etc/lumberjack2/foo/ca.crt') }
+    it { should contain_file('/etc/init.d/lumberjack-foo') }
+    it { should contain_file('/etc/lumberjack/foo') }
+    it { should contain_file('/etc/lumberjack/foo/ca.crt') }
 
   end
 
@@ -29,9 +29,9 @@ describe 'lumberjack2::instance', :type => 'define' do
       :run_as_service => false
     } end
 
-    it { should_not contain_file('/etc/init.d/lumberjack2-foo') }
-    it { should contain_file('/etc/lumberjack2/foo') }
-    it { should contain_file('/etc/lumberjack2/foo/ca.crt') }
+    it { should_not contain_file('/etc/init.d/lumberjack-foo') }
+    it { should contain_file('/etc/lumberjack/foo') }
+    it { should contain_file('/etc/lumberjack/foo/ca.crt') }
 
   end
 

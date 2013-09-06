@@ -1,4 +1,4 @@
-# Class: lumberjack2::config
+# Class: lumberjack::config
 #
 # This class exists to coordinate all configuration related actions,
 # functionality and logical units in a central place.
@@ -12,7 +12,7 @@
 # === Examples
 #
 # This class may be imported by other classes to use its functionality:
-#   class { 'lumberjack2::config': }
+#   class { 'lumberjack::config': }
 #
 # It is not intended to be used directly by external resources like node
 # definitions or other modules.
@@ -23,15 +23,15 @@
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 # Edit: Kayla Green <mailto:kaylagreen771@gmail.com>
 #
-class lumberjack2::config {
+class lumberjack::config {
     File {
         owner => root,
         group => root
     }
   
-    $configdir = $lumberjack2::params::configdir
+    $configdir = $lumberjack::params::configdir
 
-    if ($lumberjack2::ensure == 'present') {
+    if ($lumberjack::ensure == 'present') {
         # Manage the single instance dir
         file { "${configdir}":
             ensure  => directory,
@@ -55,33 +55,33 @@ class lumberjack2::config {
 
 
         #Create network portion of config file
-        $servers = $lumberjack2::servers
-        $ssl_ca = $lumberjack2::ssl_ca_path
-        $ssl_certificate = $lumberjack2::ssl_certificate
-        $ssl_key = $lumberjack2::ssl_key
+        $servers = $lumberjack::servers
+        $ssl_ca = $lumberjack::ssl_ca_path
+        $ssl_certificate = $lumberjack::ssl_certificate
+        $ssl_key = $lumberjack::ssl_key
         
         #### Setup configuration files
         include concat::setup
-        concat{ "${configdir}/conf/lumberjack2.conf":
+        concat{ "${configdir}/conf/lumberjack.conf":
             require => File["${configdir}/conf"],
         }
 
         # Add network portion of the config file
         concat::fragment{"default-start":
-            target  => "${configdir}/conf/lumberjack2.conf",
+            target  => "${configdir}/conf/lumberjack.conf",
             content => template("${module_name}/network_format.erb"),
             order   => 001,
         }  
 
         # Add the ending brackets and additional set of {} brackets needed to fix comma/json parsing issue
         concat::fragment{"default-end":
-            target  => "${configdir}/conf/lumberjack2.conf",
+            target  => "${configdir}/conf/lumberjack.conf",
             content => "\n\t\t}\n\t]\n}\n",
             order   => 999,
         }
         
     } else {
-        # Remove the lumberjack2 directory and all of its configs. 
+        # Remove the lumberjack directory and all of its configs. 
         file {$configdir : 
             ensure  => 'absent',
             purge   => true,

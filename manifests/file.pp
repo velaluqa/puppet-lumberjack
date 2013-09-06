@@ -1,4 +1,4 @@
-define lumberjack2::file (
+define lumberjack::file (
     $paths,
     $fields,
 ){
@@ -15,9 +15,9 @@ define lumberjack2::file (
         validate_hash($fields)
     }
  
-    if ($lumberjack2::ensure == 'present' ) { 
+    if ($lumberjack::ensure == 'present' ) { 
         concat::fragment{"${name}":
-            target  => "${lumberjack2::params::configdir}/conf/lumberjack2.conf",
+            target  => "${lumberjack::params::configdir}/conf/lumberjack.conf",
             content => template("${module_name}/file_format.erb"),
             order   => 010,
         }

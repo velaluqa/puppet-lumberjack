@@ -1,8 +1,8 @@
-# puppet-lumberjack2
+# puppet-lumberjack
 
-A puppet module for managing and configuring lumberjack2
+A puppet module for managing and configuring lumberjack
 
-https://github.com/jordansissel/lumberjack/tree/lumberjack2-hack
+https://github.com/jordansissel/lumberjack/tree/lumberjack-hack
 
 This module is based upon https://github.com/electrical/puppet-lumberjack 
 
@@ -12,7 +12,7 @@ This updated module is in alpha stages and not yet formally tested.
 
 Installation, make sure service is running and will be started at boot time:
 
-     class { 'lumberjack2': 
+     class { 'lumberjack': 
        cpuprofile       => '/path/to/write/cpu/profile/to/file',
        idle_flush_time  => '5',
        log_to_syslog    => false,
@@ -23,18 +23,18 @@ Installation, make sure service is running and will be started at boot time:
 
 Removal/decommissioning:
 
-     class { 'lumberjack2':
+     class { 'lumberjack':
        ensure => 'absent',
      }
 
 Install everything but disable service(s) afterwards:
 
-     class { 'lumberjack2':
+     class { 'lumberjack':
        status => 'disabled',
      }
 
 To configure file inputs:
-    lumberjack2::file { 'localhost-syslog':
+    lumberjack::file { 'localhost-syslog':
         paths    => ['/var/log/messages','/var/log/secure','/var/log/*.log/'],
         fields   => { 'type' : 'syslog' }, 
     }

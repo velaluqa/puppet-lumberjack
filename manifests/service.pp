@@ -1,13 +1,13 @@
-# Define: lumberjack2::instance
+# Define: lumberjack::instance
 #
-# This define allows you to setup an instance of lumberjack2
+# This define allows you to setup an instance of lumberjack
 #
 # === Parameters
 #
 # [*config*]
 #   The config files' location to load
 #   Value type is string
-#   Default value: /etc/lumberjack2/<instance_name>/lumberjack2-conf.json
+#   Default value: /etc/lumberjack/<instance_name>/lumberjack-conf.json
 #   This variable is required
 #
 # [*cpuprofile*]
@@ -64,15 +64,15 @@
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 #
 
-class lumberjack2::service {
+class lumberjack::service {
 
-  $config = "${lumberjack2::configdir}/conf/lumberjack2.conf" 
-  $cpuprofile = $lumberjack2::cpuprofile
-  $idle_flush_time = $lumberjack2::idle_flush_time
-  $log_to_syslog    = $lumberjack2::log_to_syslog
-  $spool_size       = $lumberjack2::spool_size
-  $run_as_service   = $lumberjack2::run_as_service          
-  $ensure = $lumberjack2::ensure  
+  $config = "${lumberjack::configdir}/conf/lumberjack.conf" 
+  $cpuprofile = $lumberjack::cpuprofile
+  $idle_flush_time = $lumberjack::idle_flush_time
+  $log_to_syslog    = $lumberjack::log_to_syslog
+  $spool_size       = $lumberjack::spool_size
+  $run_as_service   = $lumberjack::run_as_service          
+  $ensure = $lumberjack::ensure  
    
   validate_bool($run_as_service)
 
@@ -84,24 +84,24 @@ class lumberjack2::service {
 
   if ($run_as_service == true ) {
     # Setup init file if running as a service
-    $notify_lumberjack2 = $lumberjack2::restart_on_change ? {
-       true  => Service["lumberjack2"],
+    $notify_lumberjack = $lumberjack::restart_on_change ? {
+       true  => Service["lumberjack"],
        false => undef,
     }
 
-    file { '/etc/init.d/lumberjack2' :
+    file { '/etc/init.d/lumberjack' :
       ensure  => $ensure,
       mode    => '0755',
-      content => template("${module_name}/etc/init.d/lumberjack2.erb"),
-      notify  => $notify_lumberjack2
+      content => template("${module_name}/etc/init.d/lumberjack.erb"),
+      notify  => $notify_lumberjack
     }
 
     #### Service management
 
     # set params: in operation
-    if $lumberjack2::ensure == 'present' {
+    if $lumberjack::ensure == 'present' {
 
-      case $lumberjack2::status {
+      case $lumberjack::status {
         # make sure service is currently running, start it on boot
         'enabled': {
           $service_ensure = 'running'
@@ -126,7 +126,7 @@ class lumberjack2::service {
         # note: don't forget to update the parameter check in init.pp if you
         #       add a new or change an existing status.
         default: {
-          fail("\"${lumberjack2::status}\" is an unknown service status value")
+          fail("\"${lumberjack::status}\" is an unknown service status value")
         }
       }
 
@@ -138,17 +138,17 @@ class lumberjack2::service {
       $service_ensure = 'stopped'
       $service_enable = false
     }
-    service { "lumberjack2":
+    service { "lumberjack":
             ensure     => $service_ensure,
             enable     => $service_enable,
-            name       => $lumberjack2::params::service_name,
-            hasstatus  => $lumberjack2::params::service_hasstatus,
-            hasrestart => $lumberjack2::params::service_hasrestart,
-            pattern    => $lumberjack2::params::service_pattern,
-            require    => File['/etc/init.d/lumberjack2'],
+            name       => $lumberjack::params::service_name,
+            hasstatus  => $lumberjack::params::service_hasstatus,
+            hasrestart => $lumberjack::params::service_hasrestart,
+            pattern    => $lumberjack::params::service_pattern,
+            require    => File['/etc/init.d/lumberjack'],
     }
   } 
   else {
-    $notify_lumberjack2 = undef
+    $notify_lumberjack = undef
   }
 }

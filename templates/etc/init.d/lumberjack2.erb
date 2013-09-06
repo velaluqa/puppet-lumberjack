@@ -1,16 +1,16 @@
 #!/bin/bash
 # Lumberjack2 daemon
 # chkconfig: 345 20 80
-# description: lumberjack2 daemon
-# processname: lumberjack2
+# description: lumberjack daemon
+# processname: lumberjack
 
-DAEMON_PATH="/var/local/lumberjack2/"
-DAEMON="bin/lumberjack2.sh"
+DAEMON_PATH="/var/local/lumberjack/"
+DAEMON="bin/lumberjack.sh"
 OUTPUT=""
 
 DAEMONOPTS="--config <%= @config %> <% if @cpuprofile %> --cpuprofile <%= @cpuprofile  %>  <% end %> --idle-flush-time <%= @idle_flush_time %> --log-to-syslog <%= @log_to_syslog %> --spool-size <%= @spool_size %>"
 
-NAME="lumberjack2"
+NAME="lumberjack"
 DESC="Lumberjack2"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME

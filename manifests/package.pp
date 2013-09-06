@@ -1,4 +1,4 @@
-# == Class: lumberjack2::package
+# == Class: lumberjack::package
 #
 # This class exists to coordinate all software package management related
 # actions, functionality and logical units in a central place.
@@ -12,7 +12,7 @@
 # === Examples
 #
 # This class may be imported by other classes to use its functionality:
-#   class { 'lumberjack2::package': }
+#   class { 'lumberjack::package': }
 #
 # It is not intended to be used directly by external resources like node
 # definitions or other modules.
@@ -22,17 +22,17 @@
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 #
-class lumberjack2::package {
+class lumberjack::package {
 
   #### Package management
 
   # set params: in operation
-  if ($lumberjack2::ensure == 'present') {
+  if ($lumberjack::ensure == 'present') {
 
     # Check if we want to install a specific version or not
-    if $lumberjack2::version == false {
+    if $lumberjack::version == false {
 
-      $package_ensure = $lumberjack2::autoupgrade ? {
+      $package_ensure = $lumberjack::autoupgrade ? {
         true  => 'latest',
         false => 'present',
       }
@@ -40,7 +40,7 @@ class lumberjack2::package {
     } else {
 
       # install specific version
-      $package_ensure = $lumberjack2::version
+      $package_ensure = $lumberjack::version
 
     }
 
@@ -50,7 +50,7 @@ class lumberjack2::package {
   }
 
   # action
-  package { $lumberjack2::params::package :
+  package { $lumberjack::params::package :
     ensure => $package_ensure,
   }
 

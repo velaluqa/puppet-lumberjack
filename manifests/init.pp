@@ -1,6 +1,6 @@
-# == Class: lumberjack2
+# == Class: lumberjack
 #
-# This class is able to install or remove lumberjack2 on a node.
+# This class is able to install or remove lumberjack on a node.
 # It manages the status of the related service.
 #
 # [Add description - What does this module do on a node?] FIXME/TODO
@@ -81,7 +81,7 @@
 #
 #
 #
-# The default values for the parameters are set in lumberjack2::params. Have
+# The default values for the parameters are set in lumberjack::params. Have
 # a look at the corresponding <tt>params.pp</tt> manifest file if you need more
 # technical information about them.
 #
@@ -89,15 +89,15 @@
 # === Examples
 #
 # * Installation, make sure service is running and will be started at boot time:
-#     class { 'lumberjack2': }
+#     class { 'lumberjack': }
 #
 # * Removal/decommissioning:
-#     class { 'lumberjack2':
+#     class { 'lumberjack':
 #       ensure => 'absent',
 #     }
 #
 # * Install everything but disable service(s) afterwards
-#     class { 'lumberjack2':
+#     class { 'lumberjack':
 #       status => 'disabled',
 #     }
 #
@@ -107,11 +107,11 @@
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 # Editor: Kayla Green <mailto:kaylagreen@gmail.com>
 
-class lumberjack2(
-  $ensure            = $lumberjack2::params::ensure,
-  $autoupgrade       = $lumberjack2::params::autoupgrade,
-  $status            = $lumberjack2::params::status,
-  $restart_on_change = $lumberjack2::params::restart_on_change,
+class lumberjack(
+  $ensure            = $lumberjack::params::ensure,
+  $autoupgrade       = $lumberjack::params::autoupgrade,
+  $status            = $lumberjack::params::status,
+  $restart_on_change = $lumberjack::params::restart_on_change,
   $version           = false,
   $run_as_service     = true,
   $servers,
@@ -122,7 +122,7 @@ class lumberjack2(
   $idle_flush_time  = '5s',
   $spool_size       = 1024,
   $log_to_syslog    = false,
-) inherits lumberjack2::params {
+) inherits lumberjack::params {
 
   #### Validate parameters
 
@@ -166,41 +166,41 @@ class lumberjack2(
 
   #### Manage Actions
   if ($ensure == 'present') {
-        anchor {'lumberjack2::begin':
-            before  => Class['lumberjack2::config'],
-            notify  => Class['lumberjack2::service'],
+        anchor {'lumberjack::begin':
+            before  => Class['lumberjack::config'],
+            notify  => Class['lumberjack::service'],
         }
-        class {'lumberjack2::config':
-            notify  => Class['lumberjack2::service'],
+        class {'lumberjack::config':
+            notify  => Class['lumberjack::service'],
         }
-        class {'lumberjack2::package':
-            require => Class['lumberjack2::config'],
-            notify  => Class['lumberjack2::service'],
+        class {'lumberjack::package':
+            require => Class['lumberjack::config'],
+            notify  => Class['lumberjack::service'],
         }
-        class {'lumberjack2::service':
-            require => Class['lumberjack2::config'],
+        class {'lumberjack::service':
+            require => Class['lumberjack::config'],
         }
-        anchor { 'lumberjack2::end': 
-            require => Class['lumberjack2::service']
+        anchor { 'lumberjack::end': 
+            require => Class['lumberjack::service']
         }
   }
   else {
-        anchor { 'lumberjack2::begin': 
-            before  => Class['lumberjack2::service'],
-            notify  => Class['lumberjack2::config'],
+        anchor { 'lumberjack::begin': 
+            before  => Class['lumberjack::service'],
+            notify  => Class['lumberjack::config'],
         }
-        class {'lumberjack2::service':
-            notify  => Class['lumberjack2::package'],
+        class {'lumberjack::service':
+            notify  => Class['lumberjack::package'],
         }
-        class {'lumberjack2::package':
-            require => Class['lumberjack2::service'],
-            notify  => Class['lumberjack2::config'],
+        class {'lumberjack::package':
+            require => Class['lumberjack::service'],
+            notify  => Class['lumberjack::config'],
         }
-        class {'lumberjack2::config':
-            require => Class['lumberjack2::package'],
+        class {'lumberjack::config':
+            require => Class['lumberjack::package'],
         }
-        anchor {'lumberjack2::end': 
-            require => Class['lumberjack2::config'],
+        anchor {'lumberjack::end': 
+            require => Class['lumberjack::config'],
         }
   }
 }
