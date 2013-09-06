@@ -52,8 +52,13 @@
 #   String to set the specific version you want to install.
 #   Defaults to <tt>false</tt>.
 #
+# [*configdir*]
+#   Path where the configuration files will be placed.
+#   Defaults to <tt>/etc/lumberjack</tt>
+#
 # [*config*]
-#   The config files' location to load
+#   The name of the config file to create
+#   Defaults to <tt>lumberjack.conf</tt>
 #
 # [*cpuprofile*]
 #   write cpu profile to file
