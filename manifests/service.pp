@@ -66,15 +66,14 @@
 
 class lumberjack::service {
 
-  $config = "${lumberjack::config}/lumberjack.conf" 
+  $config = "${lumberjack::configdir}/conf/lumberjack.conf" 
   $cpuprofile = $lumberjack::cpuprofile
   $idle_flush_time = $lumberjack::idle_flush_time
   $log_to_syslog    = $lumberjack::log_to_syslog
   $spool_size       = $lumberjack::spool_size
   $run_as_service   = $lumberjack::run_as_service          
   $ensure = $lumberjack::ensure  
-  $installpath = $lumberjack::installpath
-
+   
   validate_bool($run_as_service)
 
   File {

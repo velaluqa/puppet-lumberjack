@@ -17,7 +17,7 @@ define lumberjack::file (
  
     if ($lumberjack::ensure == 'present' ) { 
         concat::fragment{"${name}":
-            target  => "${lumberjack::params::config}/lumberjack.conf",
+            target  => "${lumberjack::params::configdir}/conf/lumberjack.conf",
             content => template("${module_name}/file_format.erb"),
             order   => 010,
         }

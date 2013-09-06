@@ -29,16 +29,30 @@ class lumberjack::config {
         group => root
     }
   
-    $configdir = $lumberjack::config
+    $configdir = $lumberjack::params::configdir
 
     if ($lumberjack::ensure == 'present') {
-        # Manage the single config dir
+        # Manage the single instance dir
         file { "${configdir}":
+            ensure  => directory,
+            mode    => '0644',
+        }
+
+        # Manage the single config dir
+        file { "${configdir}/conf":
             ensure  => directory,
             mode    => '0640',
             purge   => true,
             recurse => true,
-       }
+            require => File ["${configdir}"],
+        }
+          # Manage the single config dir
+        file { "${configdir}/bin":
+            ensure  => directory,
+            mode    => '0644',
+            require => File ["${configdir}"],
+        }
+
 
         #Create network portion of config file
         $servers = $lumberjack::servers
@@ -48,20 +62,20 @@ class lumberjack::config {
         
         #### Setup configuration files
         include concat::setup
-        concat{ "${configdir}/lumberjack.conf":
-            require => File["${configdir}"],
+        concat{ "${configdir}/conf/lumberjack.conf":
+            require => File["${configdir}/conf"],
         }
 
         # Add network portion of the config file
         concat::fragment{"default-start":
-            target  => "${configdir}/lumberjack.conf",
+            target  => "${configdir}/conf/lumberjack.conf",
             content => template("${module_name}/network_format.erb"),
             order   => 001,
         }  
 
         # Add the ending brackets and additional set of {} brackets needed to fix comma/json parsing issue
         concat::fragment{"default-end":
-            target  => "${configdir}/lumberjack.conf",
+            target  => "${configdir}/conf/lumberjack.conf",
             content => "\n\t\t}\n\t]\n}\n",
             order   => 999,
         }
