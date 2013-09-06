@@ -42,7 +42,10 @@ class lumberjack::params {
   $status = 'enabled'
 
   # Config Directory
-  $configdir = '/var/local/lumberjack'
+  $config = '/etc/lumberjack'
+
+  # install path
+  $installpath = '/opt/lumberjack'
 
   # Restart service on change
   $restart_on_change = false
