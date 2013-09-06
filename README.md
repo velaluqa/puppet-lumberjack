@@ -8,6 +8,10 @@ This module is based upon https://github.com/electrical/puppet-lumberjack
 
 This updated module is in alpha stages and not yet formally tested.
 
+#Notice
+
+This module contains out of date documentation and is a work in progress.  Once functionality is tested, documentation will be updated.
+
 ## Usage
 
 Installation, make sure service is running and will be started at boot time:
