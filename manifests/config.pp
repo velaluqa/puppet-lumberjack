@@ -22,7 +22,7 @@
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 # Edit: Kayla Green <mailto:kaylagreen771@gmail.com>
-#
+# Edit: Ryan O'Keeffe
 class lumberjack::config {
     File {
         owner => root,

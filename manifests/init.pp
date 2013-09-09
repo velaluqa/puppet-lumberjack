@@ -111,6 +111,7 @@
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
 # Editor: Kayla Green <mailto:kaylagreen@gmail.com>
+# Editor: Ryan O'Keeeffe
 
 class lumberjack(
   $ensure            = $lumberjack::params::ensure,

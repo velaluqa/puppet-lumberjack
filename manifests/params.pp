@@ -26,7 +26,7 @@
 # === Authors
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
-#
+# Editor: Ryan O'Keeffe
 
 class lumberjack::params {
 

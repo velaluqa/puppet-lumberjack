@@ -6,11 +6,7 @@ https://github.com/jordansissel/lumberjack/tree/lumberjack-hack
 
 This module is based upon https://github.com/electrical/puppet-lumberjack 
 
-This updated module is in alpha stages and not yet formally tested.
-
-#Notice
-
-This module contains out of date documentation and is a work in progress.  Once functionality is tested, documentation will be updated.
+This updated module is in the beta stage and although it is tested, not all scenarios may be covered.
 
 ## Usage
 
@@ -42,3 +38,7 @@ To configure file inputs:
         paths    => ['/var/log/messages','/var/log/secure','/var/log/*.log/'],
         fields   => { 'type' : 'syslog' }, 
     }
+
+## Parameters
+
+Default parameters havce been set in the params.pp class file.  Options include config file and directory, package name, install dir (used by the service(s), amoung others.

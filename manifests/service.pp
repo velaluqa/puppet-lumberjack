@@ -1,65 +1,33 @@
+# == Class: lumberjack::service
+#
+# This class exists to
+# 1. Provide seperation between service creation and other aspects of the module
+# 2. Provide a basis for future enhancements involving multiple running instances
+#
+# Therefore, many operating system dependent differences (names, paths, ...)
+# are addressed in here.
+#
 #
 # === Parameters
 #
-# [*config*]
-#   The config files' location to load
-#   Value type is string
-#   Default value  
-#   This variable is required
-#
-# [*cpuprofile*]
-#   Write cpu profile to file
-#   Value type is string
-#   Default value: undef
-#   This variable is optional
-#
-# [*idle-flush-time*]
-#   Maximum time to wait for a full spool before flushing anyway
-#   Value type is number 
-#   Default value: 5 seconds
-#   This variable is optional
-#
-# [*log-to-syslog*]
-#   Log to syslog instead of stdout
-#   Value type is string
-#   Default value: false
-#   This variable is optional
-#
-# [*spool-size*]
-#   Maximum number of events to spool before a flush is forced.
-#   Value type is number
-#   Default value: `1024
-#   This variable is optional
-#
-# [*servers*]
-#   List of Host names or IP addresses of Logstash instances to connect to
-#   Value type is array
-#   Default value: undef
-#   This variable is required
+# This class does not provide any parameters.
 #
 #
-# [*ssl_ca_path*]
-#   Path to file to use for the SSL CA
-#   Value type is string
-#   This variable is mandatory
+# === Examples
 #
-# [*ssl_key*]
-#   File to use for your SSL key
-#   Value type is string
-#   Default value: undef
-#   This variable is optional
+# This class is not intended to be used directly.
 #
-# [*ssl_certificate*]
-#   File to use for your SSL certificate
-#   Value type is string
-#   Default value: undef
-#   This variable is optional
+#
+# === Links
+#
+# * {Puppet Docs: Using Parameterized Classes}[http://j.mp/nVpyWY]
+#
+#
 
-#
 # === Authors
 #
 # * Richard Pijnenburg <mailto:richard@ispavailability.com>
-#
+# Editor Ryan O'Keeffe
 
 class lumberjack::service {
 
