@@ -34,6 +34,7 @@ Install everything but disable service(s) afterwards:
      }
 
 To configure file inputs:
+
     lumberjack::file { 'localhost-syslog':
         paths    => ['/var/log/messages','/var/log/secure','/var/log/*.log/'],
         fields   => { 'type' : 'syslog' }, 
