@@ -42,4 +42,4 @@ To configure file inputs:
 
 ## Parameters
 
-Default parameters havce been set in the params.pp class file.  Options include config file and directory, package name, install dir (used by the service(s), amoung others.
+Default parameters have been set in the params.pp class file.  Options include config file and directory, package name, install dir (used by the service(s), amoung others.
