@@ -50,7 +50,7 @@ class lumberjack::config {
         #### Setup configuration files
         include concat::setup
         concat{ "${configdir}/${config}":
-            require => File[${configdir}],
+            require => File[$configdir],
         }
 
         # Add network portion of the config file
