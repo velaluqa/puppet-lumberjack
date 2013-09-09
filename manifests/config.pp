@@ -34,7 +34,7 @@ class lumberjack::config {
 
     if ($lumberjack::ensure == 'present') {
         # Manage the config dir
-        file { "${configdir}":
+        file { $configdir:
             ensure  => directory,
             mode    => '0640',
             purge   => true,
