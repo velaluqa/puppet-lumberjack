@@ -114,6 +114,8 @@
 # Editor: Ryan O'Keeeffe
 
 class lumberjack(
+  $config = $lumberjack::params::config,
+  $configdir = $lumberjack::params::configdir,
   $ensure            = $lumberjack::params::ensure,
   $autoupgrade       = $lumberjack::params::autoupgrade,
   $status            = $lumberjack::params::status,
