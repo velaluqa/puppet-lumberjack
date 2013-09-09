@@ -8,7 +8,7 @@ DAEMON_PATH="<%= @installdir %>"
 DAEMON="bin/lumberjack.sh"
 OUTPUT=""
 
-DAEMONOPTS="--config <%= @fullconfig %> <% if @cpuprofile %> --cpuprofile <%= @cpuprofile  %>  <% end %> --idle-flush-time <%= @idle_flush_time %> --log-to-syslog <%= @log_to_syslog %> --spool-size <%= @spool_size %>"
+DAEMONOPTS="--config=<%= @fullconfig %> <% if @cpuprofile %> --cpuprofile=<%= @cpuprofile  %>  <% end %> --idle-flush-time=<%= @idle_flush_time %> --log-to-syslog=<%= @log_to_syslog %> --spool-size=<%= @spool_size %>"
 
 NAME="lumberjack"
 DESC="Lumberjack"
