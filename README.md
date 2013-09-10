@@ -2,9 +2,9 @@
 
 A puppet module for managing and configuring lumberjack
 
-https://github.com/jordansissel/lumberjack/tree/lumberjack-hack
+https://github.com/jordansissel/lumberjack/
 
-This module is based upon https://github.com/electrical/puppet-lumberjack 
+This module is based upon https://github.com/electrical/puppet-lumberjack and https://github.com/MixMuffins/puppet-lumberjack
 
 This updated module is in the beta stage and although it is tested, not all scenarios may be covered.
 
