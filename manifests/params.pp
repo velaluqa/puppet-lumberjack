@@ -46,7 +46,7 @@ class lumberjack::params {
 
   # Config File
   $config = 'lumberjack.conf'
-  
+
   # Install Directory
   $installdir = '/opt/lumberjack'
 

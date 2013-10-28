@@ -114,22 +114,22 @@
 # Editor: Ryan O'Keeeffe
 
 class lumberjack(
-  $config = $lumberjack::params::config,
-  $configdir = $lumberjack::params::configdir,
+  $config            = $lumberjack::params::config,
+  $configdir         = $lumberjack::params::configdir,
   $ensure            = $lumberjack::params::ensure,
   $autoupgrade       = $lumberjack::params::autoupgrade,
   $status            = $lumberjack::params::status,
   $restart_on_change = $lumberjack::params::restart_on_change,
   $version           = false,
-  $run_as_service     = true,
+  $run_as_service    = true,
   $servers,
   $ssl_ca_path,
-  $ssl_certificate         = undef,
-  $ssl_key          = undef,
-  $cpuprofile       = undef,
-  $idle_flush_time  = '5s',
-  $spool_size       = 1024,
-  $log_to_syslog    = false,
+  $ssl_certificate   = undef,
+  $ssl_key           = undef,
+  $cpuprofile        = undef,
+  $idle_flush_time   = '5s',
+  $spool_size        = 1024,
+  $log_to_syslog     = false,
 ) inherits lumberjack::params {
 
   #### Validate parameters
@@ -188,12 +188,12 @@ class lumberjack(
         class {'lumberjack::service':
             require => Class['lumberjack::config'],
         }
-        anchor { 'lumberjack::end': 
+        anchor { 'lumberjack::end':
             require => Class['lumberjack::service']
         }
   }
   else {
-        anchor { 'lumberjack::begin': 
+        anchor { 'lumberjack::begin':
             before  => Class['lumberjack::service'],
             notify  => Class['lumberjack::config'],
         }
@@ -207,7 +207,7 @@ class lumberjack(
         class {'lumberjack::config':
             require => Class['lumberjack::package'],
         }
-        anchor {'lumberjack::end': 
+        anchor {'lumberjack::end':
             require => Class['lumberjack::config'],
         }
   }

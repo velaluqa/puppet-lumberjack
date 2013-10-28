@@ -31,14 +31,14 @@
 
 class lumberjack::service {
 
-  $fullconfig = "${lumberjack::configdir}/${lumberjack::config}" 
-  $cpuprofile = $lumberjack::cpuprofile
+  $fullconfig      = "${lumberjack::configdir}/${lumberjack::config}"
+  $cpuprofile      = $lumberjack::cpuprofile
   $idle_flush_time = $lumberjack::idle_flush_time
-  $log_to_syslog    = $lumberjack::log_to_syslog
-  $spool_size       = $lumberjack::spool_size
-  $run_as_service   = $lumberjack::run_as_service          
-  $ensure = $lumberjack::ensure  
-  $installdir = $lumberjack::installdir
+  $log_to_syslog   = $lumberjack::log_to_syslog
+  $spool_size      = $lumberjack::spool_size
+  $run_as_service  = $lumberjack::run_as_service
+  $ensure          = $lumberjack::ensure
+  $installdir      = $lumberjack::installdir
 
   validate_bool($run_as_service)
 
@@ -113,7 +113,7 @@ class lumberjack::service {
             pattern    => $lumberjack::params::service_pattern,
             require    => File['/etc/init.d/lumberjack'],
     }
-  } 
+  }
   else {
     $notify_lumberjack = undef
   }
