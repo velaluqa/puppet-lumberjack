@@ -120,6 +120,7 @@ class lumberjack(
   $autoupgrade       = $lumberjack::params::autoupgrade,
   $status            = $lumberjack::params::status,
   $restart_on_change = $lumberjack::params::restart_on_change,
+  $manage_package    = true,
   $version           = false,
   $run_as_service    = true,
   $servers,

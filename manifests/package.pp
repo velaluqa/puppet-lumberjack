@@ -24,34 +24,37 @@
 #
 class lumberjack::package {
 
-  #### Package management
+  if ($lumberjack::manage_package == true) {
 
-  # set params: in operation
-  if ($lumberjack::ensure == 'present') {
+    #### Package management
 
-    # Check if we want to install a specific version or not
-    if $lumberjack::version == false {
+    # set params: in operation
+    if ($lumberjack::ensure == 'present') {
 
-      $package_ensure = $lumberjack::autoupgrade ? {
-        true  => 'latest',
-        false => 'present',
-      }
+      # Check if we want to install a specific version or not
+      if $lumberjack::version == false {
 
-    } else {
+        $package_ensure = $lumberjack::autoupgrade ? {
+          true  => 'latest',
+          false => 'present',
+        }
 
-      # install specific version
-      $package_ensure = $lumberjack::version
+        } else {
 
-    }
+        # install specific version
+        $package_ensure = $lumberjack::version
 
-  # set params: removal
-  } else {
-    $package_ensure = 'absent'
+        }
+
+        # set params: removal
+        } else {
+        $package_ensure = 'absent'
+        }
+
+        # action
+        package { $lumberjack::params::package :
+          ensure => $package_ensure,
+        }
+
   }
-
-  # action
-  package { $lumberjack::params::package :
-    ensure => $package_ensure,
-  }
-
 }
